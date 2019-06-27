@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8" />
+		<title>投票页面</title>
+		<script src="jitai/js/jquery-3.1.1.min.js"></script>
+		<link rel="stylesheet" href="jitai/layui/css/layui.css" />
+		<script src="jitai/layui/layui.js"></script>
+
+		<style>
+			*{
+				margin: 0 auto;
+			}
+			.diva{
+				height: 750px;
+				width: 100%;
+				background-image: url(jitaiimg/116620-106.jpg);
+			}
+			.diva h1{
+				padding-top: 50px;
+				margin-left: 100px;
+				font-family: "微软雅黑";
+				color: black;
+				font-size: 40px;
+			}
+			.diva img{
+				float: left;
+				margin-left: 170px;
+				margin-top: 20px;
+			}
+			.divtable{
+				height: 400px;
+				width: 400px;
+				font-size: 30px;
+				text-align: center;
+				float: right;
+				margin-top: 20px;
+				background-color: pink;
+				margin-right: 250px;
+			}
+			.layui-table tr th{
+				text-align: center;
+			}
+			.diva h2{
+				float: left;
+				margin-left: 580px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="diva" style="padding-top: 20px;">
+			<div style="width: 300px; margin-left: 38%">
+				<label class="layui-form-label">PK搜索</label>
+			    <div class="layui-input-block">
+			      <input type="text" id="pkid" name="title" lay-verify="title" autocomplete="off" placeholder="请输入pk编号搜索pk" class="layui-input">
+			      <button class="layui-btn" onclick="findPkByid()" style="float:right; margin-right:-63px ; margin-top: -38px;" lay-submit="" lay-filter="demo1">搜索</button>
+			    </div>
+		    </div>
+			
+			<h1>请扫描二维码参与投票</h1>
+			<img src="jitai/images/erweima.png" />
+			<h2>当前票数展示</h2>
+			<div class="divtable">
+				<table class="layui-table" id="votetable" lay-skin="row" lay-size="lg">
+				<tr>
+					<th>参与选手</th>
+					<th>当前票数</th>
+				</tr>
+			</table>
+			</div>
+			<div style="float: left; margin-left: -750px; margin-top: 260px;">
+				<a href="" id="A"><h2>模拟跳转</h2></a>
+			</div>
+		</div>
+		<script>
+
+			$(function(){
+				//单机a标签
+				$('#A').click(function(){
+					var id=$("#pkid").val();
+					$('#A').attr('href',"/tovote?id="+id)//把获取到的值传给a标签的action
+				})
+			});
+			function findPkByid(){
+				$("#votetable").html(" ")
+				var id=$("#pkid").val();
+				url="/getVoteByid";
+				var param={"id":id};
+				$.post(url,param,function (data) {
+					for(var i=0;i<data.length;i++){
+					$("#votetable").append("<tr><td>"+data[i].participant_name+"</td>" +
+							"<td>"+data[i].poll+"票</td></tr>")
+					}
+				});
+			}
+		</script>
+	</body>
+</html>

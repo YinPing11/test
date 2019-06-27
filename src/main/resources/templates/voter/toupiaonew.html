@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="jitai/js/jquery-3.1.1.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <link rel="stylesheet" href="jitai/css/styles-merged.css">
+    <link rel="stylesheet" href="jitai/css/style.min.css">
+    <link rel="stylesheet" href="jitai/css/custom.css">
+
+  </head>
+  <body>
+  <script type="text/javascript">
+  </script>
+
+  <div class="probootstrap-loader"></div>
+
+  <header role="banner" class="probootstrap-header">
+    <div class="container">
+      <a href="#" class="probootstrap-logo">在线投票</a>
+      <a href="#" class="probootstrap-burger-menu visible-xs" ><i>hello</i></a>
+    </div>
+  </header>
+
+  <div id="neirong" class="probootstrap-main">
+  </div>
+
+
+  <footer class="probootstrap-footer">
+    <div class="container">
+      <div class="row">
+
+      </div>
+    </div>
+  </footer>
+  <div class="gototop js-top">
+    <a href="#" class="js-gotop"><i class="icon-chevron-thin-up"></i></a>
+  </div>
+  
+  <script src="jitai/js/scripts.min.js"></script>
+  <script src="jitai/js/main.min.js"></script>
+  <script src="jitai/js/custom.js"></script>
+  <script type="text/javascript">
+
+    function GetQueryString(name)
+    {
+      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+      var r = window.location.search.substr(1).match(reg);
+      if(r!=null)return unescape(r[2]); return null;
+    }
+      var pkid=GetQueryString("id");
+      var param={"pkid":pkid }
+      var url="/GetParticipants"
+    var name=new Array();
+      $.get(url,param,function (data) {
+        for(var i=0;i<data.length;i++){
+          $("#neirong").append("<section class=\"probootstrap-section-half\">" +
+                  "<div class=\"probootstrap-image probootstrap-animate fadeIn probootstrap-animated\" data-animate-effect=\"fadeIn\" style=\"background-image: url(upload/imgs/"+data[i].participant_picture+")\"></div>" +
+                    "<div class=\"probootstrap-text\">" +
+                      "<div class=\"probootstrap-inner probootstrap-animate fadeInUp probootstrap-animated\">" +
+                  "<h1 id="+"'pname"+i+"' class=\"heading\">"+data[i].participant_name+"</h1>" +
+                  "<p>参赛作品："+data[i].game_production+"</p>" +
+                  "<p>当前票数："+data[i].poll+"</p>" +
+                  "<button pname='"+data[i].participant_name+"' name='tpbt' id="+"'dianji"+i+"' class=\"layui-btn tpbt\"  style=\"\" lay-submit=\"\" lay-filter=\"demo1\">投票</button>" +
+                  "</div>" +
+                  "    </div>" +
+                  "  </section>")
+          name[i]=$("#pname"+i).html();
+        }
+        var tpbt=document.getElementsByName("tpbt");
+        $(".tpbt").click(this, function () {
+          var name=this.getAttribute("pname");
+          url="/addPoll";
+          param={"name":name,"pkid":pkid};
+          $.post(url,param,function (data) {
+                alert(data.content)
+                window.location.reload();
+          })
+        });
+      });
+
+
+  </script>
+  </body>
+</html>

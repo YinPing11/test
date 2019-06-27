@@ -1,10 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 
+<head>
+<meta charset="UTF-8">
+<title>投票系统登录</title>
+<link rel="stylesheet" href="jitai/css/login.css" />
+</head>
+
+<body>
+<img src="jitai/img/bgImg.jpg" class="bgImg" />
+<div class="content">
+	<div class="bidTitle">网上投票系统后台登录</div>
+	<div class="logCon">
+		<form th:action="@{/login_sumbit}"  method="post">
+			<div class="line"><span>账号:</span>
+			<input name="name" class="bt_input" type="text" /></div>
+			<div class="line"><span>密码:</span>
+			<input name="pass" class="bt_input" type="password" /></div>
+			<button type="submit" class="logingBut">登录</button>
+		</form>
+	</div>
+</div>
+<div style="text-align:center;">
+</div>
+<script type="text/javascript">
+	function add() {
+		var url="/login_sumbit";
+		var param=$("#form").serialize();//对表单元素序列化
+		$.post(url,param,function (data){
+			alert(data.content);
+		} )
+	}
+</script>
 </body>
+
 </html>

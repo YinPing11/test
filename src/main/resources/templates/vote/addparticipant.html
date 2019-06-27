@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="jitai/layui/css/layui.css"  media="all">
+		<script src="jitai/js/jquery-3.1.1.min.js"></script>
+	</head>
+	<form class="layui-form" method="post" enctype="multipart/form-data">
+		<div class="layui-upload"></div>
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">姓名</label>
+		    <div class="layui-input-block">
+		      <input type="text" id="participant_name" name="participant_name" lay-verify="title" autocomplete="off" placeholder="请输入姓名" class="layui-input">
+		    </div>
+		  </div>	  
+		  <div style="margin-left: 2px;">
+		  	请选择上传文件:<input type="file" id="file" name="file">
+		  </div>
+		  <div style="margin-top: 20px;" class="layui-form-item layui-form-text">
+		    <label class="layui-form-label">作品描述</label>
+		    <div class="layui-input-block">
+		      <textarea placeholder="请输入内容" id="game_production" name="game_production" class="layui-textarea"></textarea>
+		    </div>
+		  </div>
+		  <div class="layui-form-item">
+		    <div class="layui-input-block">
+		      <button class="layui-btn" type="button" onclick="addsumbit()" lay-submit="" lay-filter="demo1">立即提交</button>
+		      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		    </div>
+		  </div>
+		</form>
+		<script src="jitai/layui/layui.js" charset="utf-8"></script>
+		<script>
+			function addsumbit(){
+				var formData = new FormData();
+				var fileObj = document.getElementById('file').files[0]; //获得文件上传的输入框的文件流
+				formData.append('file',fileObj);
+				var participant_name = document.getElementById('participant_name').value; //获得文件上传的输入框的文件流
+				formData.append('participant_name',participant_name);
+				var game_production = document.getElementById('game_production').value; //获得文件上传的输入框的文件流
+				formData.append('game_production',game_production);
+				$.ajax({
+							async:false,
+							url:"/upload",
+							type:'POST',
+							processData : false,
+							contentType : false,
+							data:formData,
+							success:function(data) {
+								alert(data.content);
+								window.location.href = '/participantshow';
+							}
+						}
+				);
+			}
+
+
+		layui.use(['form', 'layedit', 'laydate'], function(){
+		  var form = layui.form
+		  ,layer = layui.layer
+		  ,layedit = layui.layedit
+		  ,laydate = layui.laydate;
+
+		  //日期
+		  laydate.render({
+		    elem: '#date'
+		  });
+		  laydate.render({
+		    elem: '#date1'
+		  });
+
+		  //创建一个编辑器
+		  var editIndex = layedit.build('LAY_demo_editor');
+
+		  //自定义验证规则
+		  form.verify({
+		    title: function(value){
+		      if(value.length < 5){
+		        return '标题至少得5个字符啊';
+		      }
+		    }
+		    ,pass: [
+		      /^[\S]{6,12}$/
+		      ,'密码必须6到12位，且不能出现空格'
+		    ]
+		    ,content: function(value){
+		      layedit.sync(editIndex);
+		    }
+		  });
+
+		});
+		</script>
+	</body>
+</html>
